@@ -16,21 +16,22 @@ import numpy as np
 
 from .answer import answer
 from .index import HybridIndex
+from .profile import Profile
 
 
 def norm(s: str) -> str:
     return re.sub(r"[^a-z0-9]", "", s.lower())
 
 
-def run_eval(index: HybridIndex, backend, questions: list[dict], k: int = 4,
+def run_eval(index: HybridIndex, backend, questions: list[dict], k: int | None = None,
              limit: int | None = None, audit_path: str | Path | None = None,
-             verbose: bool = True) -> dict:
+             verbose: bool = True, profile: Profile | None = None) -> dict:
     rows = []
     items = questions[:limit] if limit else questions
     for i, q in enumerate(items, 1):
         groups = q.get("user_groups") or ["partners"]
         ans = answer(q["question"], index, backend, k=k, user_groups=groups,
-                     user=f"eval:{','.join(groups)}", audit_path=audit_path)
+                     user=f"eval:{','.join(groups)}", audit_path=audit_path, profile=profile)
         retrieved = [h.chunk.doc for h in ans.hits]
         cited = [c["doc"] for c in ans.citations]
         kind = q["kind"]

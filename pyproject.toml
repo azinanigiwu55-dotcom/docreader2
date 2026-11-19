@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "private-doc-qa"
+version = "0.1.0"
+description = "Permission-aware, citation-first document Q&A that runs entirely in your own environment"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "pypdf",
+  "python-docx",
+  "reportlab",
+  "rank-bm25",
+  "requests",
+]
+
+[project.optional-dependencies]
+embeddings = ["sentence-transformers"]
+dev = ["pytest"]
+
+[project.scripts]
+docqa = "docqa.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

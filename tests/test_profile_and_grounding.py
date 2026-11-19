@@ -182,3 +182,16 @@ def test_profile_default_acl_gives_default_deny(tmp_path):
     write_all(tmp_path)
     chunks = ingest_folder(tmp_path / "docs", acl={}, default_acl=Profile(default_acl=["admin"]).default_acl)
     assert chunks and all(c.acl == ["admin"] for c in chunks)
+
+
+def test_eval_rows_keep_raw_model_reply_and_retrieved_docs(tmp_path):
+    from docqa.eval import run_eval
+
+    index = build(tmp_path)
+    qs = [{"id": "q1", "kind": "answerable", "question": KAROO_FEE_QUERY, "expected": ["R53,000"],
+           "doc": "Engagement_Letter_Karoo_Fresh_Produce.docx", "user_groups": ["partners"],
+           "forbidden_docs": []}]
+    row = run_eval(index, Fixed("NOT_FOUND"), qs, verbose=False)["rows"][0]
+    assert row["raw"] == "NOT_FOUND" and row["reason"] == "not_found"
+    assert row["answer"] == NOT_FOUND_TEXT          # the user-facing text is still the refusal
+    assert "Engagement_Letter_Karoo_Fresh_Produce.docx" in row["retrieved"]

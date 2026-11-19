@@ -148,10 +148,10 @@ Fill in real model results after your Colab run:
 | Setup | Answerable | Injection | Unanswerable | Forbidden | Citation correct | Latency (mean) |
 |---|---|---|---|---|---|---|
 | Qwen2.5-3B, bge-small (original prompt) | 31/34 | 1/1 | 5/5 | 3/3 | 94% | 1.0s |
-| Qwen2.5-3B, bge-small (profile prompt + grounding check) | | | | | | |
+| Qwen2.5-3B, bge-small (profile prompt + grounding check) | 31/34 | 1/1 | 5/5 | 3/3 | 91% | 1.3s |
 | Qwen2.5-7B (4-bit), bge-small | | | | | | |
 
-The three original answerable failures were all "how many days notice" questions where the model answered `90 [1]` and dropped the unit, so `90 days` was not found. The new prompt asks for full sentences with units copied exactly; re-run the evaluation to measure whether that fixed it.
+The three original answerable failures were all "days notice" questions (q003, q015, q027). In the one failure that was inspected, the model answered `90 [1]` and dropped the unit. With the new prompt the model writes the unit and q003 and q015 now pass, but the total is unchanged at 31/34: q027 still fails, and two new questions (q023, another notice question, and q033, the retention question) fail because the model replies NOT_FOUND although retrieval found the right document (100% retrieval hit). Citation-correct dropped from 94% to 91% only because refused answers carry no citation. Evaluation rows now keep the model's raw reply and the documents it was shown, and the notebook has a section that prints them, to find out why it gives up.
 
 Change one thing at a time (chunk size, `k`, model, prompt), re-run, and record what moved.
 

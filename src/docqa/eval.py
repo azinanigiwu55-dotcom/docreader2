@@ -37,6 +37,9 @@ def run_eval(index: HybridIndex, backend, questions: list[dict], k: int | None =
         kind = q["kind"]
         row = {"id": q["id"], "kind": kind, "question": q["question"], "answer": ans.text,
                "found": ans.found, "reason": ans.reason, "cited": sorted(set(cited)),
+               # What the model actually said (the answer above is replaced by the refusal text
+               # when a reply is rejected) and what it was shown, so failures can be diagnosed.
+               "raw": ans.raw, "retrieved": list(dict.fromkeys(retrieved)),
                "latency_s": round(ans.latency_s, 3)}
 
         if kind in ("answerable", "injection"):

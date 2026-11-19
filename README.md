@@ -37,7 +37,7 @@ This project builds those three things first and measures them.
 ### Option A: Google Colab (free GPU, no credit card)
 
 1. Push this repo to your GitHub account.
-2. Open `notebooks/01_colab_pipeline.ipynb` in Colab and set a **T4 GPU** runtime.
+2. Open `notebooks/02_colab_pipeline_profiles.ipynb` in Colab (the current version; `01_colab_pipeline.ipynb` is the original) and set a **T4 GPU** runtime.
 3. Edit `REPO_URL` in the first cell and run the cells in order.
 
 ### Option B: your own machine or a plain Linux VPS (no Docker)
@@ -169,7 +169,7 @@ src/docqa/
   eval.py      evaluation harness and report
   cli.py       command line (synth, index, ask, eval)
 profiles/      example customer profiles
-notebooks/     Colab notebook
+notebooks/     Colab notebooks (02 uses customer profiles)
 tests/         pytest suite (no downloads needed)
 ```
 
